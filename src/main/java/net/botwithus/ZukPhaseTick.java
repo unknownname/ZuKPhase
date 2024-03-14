@@ -52,6 +52,17 @@ public class ZukPhaseTick extends TickingScript {
     }
     public ZukPhaseTick(String s, ScriptConfig scriptConfig, ScriptDefinition scriptDefinition) {
         super(s, scriptConfig, scriptDefinition);
+
+
+
+    }
+
+
+  public boolean onInitialize()
+    {
+        super.onInitialize();
+        setActive(false);
+
         this.sgc = new ZukPhaseGraphicsContext(getConsole(), this);
 
         subscribe(ChatMessageEvent.class, chatMessageEvent -> {
@@ -71,28 +82,23 @@ public class ZukPhaseTick extends TickingScript {
         });
 
         subscribe(SkillUpdateEvent.class, skillUpdateEvent -> {
-            if(skillUpdateEvent.getId() == Skills.CONSTRUCTION.getId())
+            if(skillUpdateEvent.getId() == Skills.CONSTITUTION.getId())
             {
-                if(skillUpdateEvent.getCurrentLevel() < skillUpdateEvent.getActualLevel())
+               // println("Actual Level Loop  1: " + Skills.NECROMANCY.getActualLevel());
+               // println("Current Level Loop  1: " + skillUpdateEvent.getCurrentLevel());
+
+                if( skillUpdateEvent.getActualLevel() < skillUpdateEvent.getCurrentLevel() )
                 {
+                    println("Actual Level: " + Skills.CONSTITUTION.getActualLevel());
+                    println("Current Level: " + skillUpdateEvent.getCurrentLevel());
                     ActionBar.useItem(String.valueOf(restore), "Drink");
                 }
             }
 
         });
 
-
-    }
-
-
- /*  public boolean onInitialize()
-    {
-        super.onInitialize();
-        setActive(false);
-
-
         return true;
-    }*/
+    }
 
     @Override
     public void onTick(LocalPlayer localPlayer) {
@@ -106,7 +112,7 @@ public class ZukPhaseTick extends TickingScript {
             case IDLE -> {
                 //do nothing
                 println("We're idle!");
-                Execution.delay(random.nextLong(1000, 3000));
+                //Execution.delay(random.nextLong(500, 1000));
             }
             case SKILLING -> {
                 //do some code that handles your skilling
@@ -125,6 +131,7 @@ public class ZukPhaseTick extends TickingScript {
         if (ZukBoss == null) {
             return random.nextLong(750, 1500);
         }
+
         if(ZukBoss != null) {
             //println("Boss Animation: " + ZukBoss.getAnimationId());
             Component pain = ComponentQuery.newQuery(291).spriteId(30721).results().first();
@@ -141,19 +148,28 @@ public class ZukPhaseTick extends TickingScript {
                 ActionBar.useAbility("Freedom");
                 Processing_Melee();
             }
-            if (ZukBoss.getAnimationId() == 34498) {
+            if (ZukBoss.getAnimationId() == 34497) {
                 //Melee Prayer
                 Processing_Melee();
+                delay(600);
 
             } else if (ZukBoss.getAnimationId() == 34498) {
                 //Melee
                 Processing_Melee();
+                delay(600);
             } else if (ZukBoss.getAnimationId() == 34499) {
                 //Mage Prayer
                 Processing_Mage();
+                delay(1200);
             } else if (ZukBoss.getAnimationId() == 34496) {
                 //Melee
                 Processing_Melee();
+            }
+            else {
+                Processing_Melee();
+                delay(600);
+                Processing_Mage();
+                delay(600);
             }
 
             if(message.contains("Sear!") || message.contains("Suffer!"))
@@ -178,6 +194,37 @@ public class ZukPhaseTick extends TickingScript {
                 EmpowerMagic();
                 println("Empowered Magic");
             }
+            else if(message.contains("The skies burn!") || message.contains("Flames consume you!") || message.contains("Fall, and burn to ash!"))
+            {
+                Processing_Mage();
+                println("Igneous Rain");
+            }
+        }
+
+
+        Npc Hur = NpcQuery.newQuery().name("Igneous TzekHaar-Hur").results().first();
+        if(Hur !=null)
+        {
+
+            Hur.interact("Attack");
+            delay(600);
+            ActionBar.useAbility("Surge");
+        }
+
+        Npc Xil = NpcQuery.newQuery().name("Igneous TzekHaar-Xil").results().first();
+        if(Xil !=null)
+        {
+            Xil.interact("Attack");
+            delay(600);
+            ActionBar.useAbility("Surge");
+        }
+
+        Npc Mej = NpcQuery.newQuery().name("Igneous TzekHaar-Mej").results().first();
+        if(Hur !=null)
+        {
+            Mej.interact("Attack");
+            delay(600);
+            ActionBar.useAbility("Surge");
         }
 
         return random.nextLong(250,500);
@@ -212,7 +259,9 @@ public class ZukPhaseTick extends TickingScript {
         Processing_Mage();
         //ActionBar.useAbility("Deflect Mage");//
         ActionBar.useAbility("Surge");
+        delay(600);
         Processing_Melee();
+        delay(600);
         ActionBar.useItem(String.valueOf(restore), "Drink");
     }
 
