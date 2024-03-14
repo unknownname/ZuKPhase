@@ -42,6 +42,9 @@ public class ZukPhaseTick extends TickingScript {
     String matchtext = "";
     boolean success = false;
     private Random random = new Random();
+    boolean hassurgednpc1 = false;
+    boolean hassurgednpc2 = false;
+    boolean hassurgednpc3 = false;
     private Pattern restore = Regex.getPatternForContainsString("Super restore potion");
     enum BotState {
         //define your own states here
@@ -208,7 +211,10 @@ public class ZukPhaseTick extends TickingScript {
 
             Hur.interact("Attack");
             delay(600);
-            ActionBar.useAbility("Surge");
+            if(hassurgednpc1 == false) {
+                ActionBar.useAbility("Surge");
+                hassurgednpc1 = true;
+            }
         }
 
         Npc Xil = NpcQuery.newQuery().name("Igneous TzekHaar-Xil").results().first();
@@ -216,7 +222,10 @@ public class ZukPhaseTick extends TickingScript {
         {
             Xil.interact("Attack");
             delay(600);
-            ActionBar.useAbility("Surge");
+            if(hassurgednpc1 == false) {
+                ActionBar.useAbility("Surge");
+                hassurgednpc2 = true;
+            }
         }
 
         Npc Mej = NpcQuery.newQuery().name("Igneous TzekHaar-Mej").results().first();
@@ -224,7 +233,10 @@ public class ZukPhaseTick extends TickingScript {
         {
             Mej.interact("Attack");
             delay(600);
-            ActionBar.useAbility("Surge");
+            if(hassurgednpc1 == false) {
+                ActionBar.useAbility("Surge");
+                hassurgednpc3 = true;
+            }
         }
 
         return random.nextLong(250,500);
