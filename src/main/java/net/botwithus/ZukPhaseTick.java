@@ -248,7 +248,7 @@ public class ZukPhaseTick extends TickingScript {
         //ActionBar.usePrayer("Deflect Melee");
         println("Detecting Melee switch, attempting...");
         if(VarManager.getVarbitValue(16770) == 0)
-            success = ActionBar.usePrayer("Deflect Magic");
+            success = ActionBar.usePrayer("Deflect Melee");
         else {
             println("Varbit 16798 was" + VarManager.getVarbitValue(16770));
         }
